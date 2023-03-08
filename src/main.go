@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"auth-service/src/controller"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
