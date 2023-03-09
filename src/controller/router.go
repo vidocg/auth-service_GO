@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"auth-service/src/error"
 	"auth-service/src/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,8 @@ func InitRoutes(r *gin.Engine) {
 			context.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		context.JSON(http.StatusOK, GenerateToken(authRequest))
+		obj, saveErr := GenerateToken(authRequest)
+		resolveResponse(obj, saveErr, context)
 	})
 
 	r.POST("/user", func(context *gin.Context) {
@@ -25,15 +27,25 @@ func InitRoutes(r *gin.Engine) {
 			context.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		context.JSON(http.StatusOK, SaveUser(*user))
+		obj, saveErr := SaveUser(*user)
+		resolveResponse(obj, saveErr, context)
 	})
 
 	r.GET("/user", func(context *gin.Context) {
 		token := context.Query("token")
-		if token == "" {
+		if &token == nil {
 			context.AbortWithError(http.StatusBadRequest, fmt.Errorf("jwt is null"))
 			return
 		}
-		context.JSON(http.StatusOK, GetUserByToken(token))
+		obj, err := GetUserByToken(token)
+		resolveResponse(obj, err, context)
 	})
+}
+
+func resolveResponse(obj any, err *error.AppError, context *gin.Context) {
+	if err != nil {
+		context.JSON(err.HttpErrorCode, err.Message)
+	} else {
+		context.JSON(http.StatusOK, obj)
+	}
 }
