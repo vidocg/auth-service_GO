@@ -2,10 +2,10 @@ package models
 
 type AuthRequest struct {
 	Password string
-	Email string
+	Email    string
 }
 
 type AuthResponse struct {
-	Jwt string
+	Jwt     string
 	Refresh string
 }
