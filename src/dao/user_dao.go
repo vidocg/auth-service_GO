@@ -2,11 +2,13 @@ package dao
 
 import "auth-service/src/models"
 
-func FindByEmail(email string) models.User {
+type UserDao struct{}
+
+func (ud UserDao) FindByEmail(email string) models.User {
 	return commits[email]
 }
 
-func SaveUser(user models.User) models.User {
+func (ud UserDao) SaveUser(user models.User) models.User {
 	commits[user.Email] = user
 	return user
 }

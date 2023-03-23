@@ -1,7 +1,7 @@
 package service
 
 import (
-	"auth-service/src/dao"
+	"auth-service/src/container_binding"
 	"auth-service/src/error"
 	"auth-service/src/models"
 	"auth-service/src/util"
@@ -9,10 +9,10 @@ import (
 )
 
 func GenerateToken(req *models.AuthRequest) (*models.AuthResponse, *error.AppError) {
-	user, err := getUserByEmail(req.Email)
+	user, appErr := getUserByEmail(req.Email)
 
-	if err != nil {
-		return nil, err
+	if appErr != nil {
+		return nil, appErr
 	}
 	if util.CheckPasswordHash(req.Password, user.Password) != true {
 		return nil, &error.AppError{
@@ -24,7 +24,11 @@ func GenerateToken(req *models.AuthRequest) (*models.AuthResponse, *error.AppErr
 
 	token, refreshToken := util.GenerateJwt(*user)
 	user.RefreshToken = refreshToken
-	dao.SaveUser(*user)
+	db, appErr := container_binding.ResolveUserDao()
+	if appErr != nil {
+		return nil, appErr
+	}
+	db.SaveUser(*user)
 
 	return &models.AuthResponse{Jwt: token, Refresh: refreshToken}, nil
 }
@@ -39,12 +43,21 @@ func SaveUser(user models.User) (*models.User, *error.AppError) {
 		}
 	}
 	user.Password = hash
-	savedUser := dao.SaveUser(user)
+	db, appErr := container_binding.ResolveUserDao()
+	if appErr != nil {
+		return nil, appErr
+	}
+	savedUser := db.SaveUser(user)
 	return &savedUser, nil
 }
 
 func getUserByEmail(email string) (*models.User, *error.AppError) {
-	user := dao.FindByEmail(email)
+	db, appErr := container_binding.ResolveUserDao()
+	if appErr != nil {
+		return nil, appErr
+	}
+
+	user := db.FindByEmail(email)
 	if &user == nil {
 		return nil, &error.AppError{
 			Error:         fmt.Errorf("user not found"),
@@ -57,7 +70,6 @@ func getUserByEmail(email string) (*models.User, *error.AppError) {
 
 func GetUserByToken(tokenString string) (*models.User, *error.AppError) {
 	email, err := util.VerifyJwt(tokenString)
-	//todo handle error
 	if err != nil {
 		return nil, &error.AppError{
 			Error:         err,
@@ -65,6 +77,12 @@ func GetUserByToken(tokenString string) (*models.User, *error.AppError) {
 			HttpErrorCode: 403,
 		}
 	}
-	user := dao.FindByEmail(email)
+
+	db, appErr := container_binding.ResolveUserDao()
+	if appErr != nil {
+		return nil, appErr
+	}
+
+	user := db.FindByEmail(email)
 	return &user, nil
 }
