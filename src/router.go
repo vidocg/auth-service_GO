@@ -1,7 +1,8 @@
-package controller
+package main
 
 import (
-	"auth-service/src/error"
+	"auth-service/src/container_binding"
+	"auth-service/src/custom_error"
 	"auth-service/src/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,7 @@ import (
 )
 
 func InitRoutes(r *gin.Engine) {
+	controller := container_binding.ResolveAuthController()
 	r.POST("/token", func(context *gin.Context) {
 		authRequest := &models.AuthRequest{}
 		err := context.BindJSON(authRequest)
@@ -16,7 +18,7 @@ func InitRoutes(r *gin.Engine) {
 			context.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		obj, saveErr := GenerateToken(authRequest)
+		obj, saveErr := controller.GenerateToken(authRequest)
 		resolveResponse(obj, saveErr, context)
 	})
 
@@ -27,7 +29,7 @@ func InitRoutes(r *gin.Engine) {
 			context.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		obj, saveErr := SaveUser(*user)
+		obj, saveErr := controller.SaveUser(*user)
 		resolveResponse(obj, saveErr, context)
 	})
 
@@ -37,12 +39,12 @@ func InitRoutes(r *gin.Engine) {
 			context.AbortWithError(http.StatusBadRequest, fmt.Errorf("jwt is null"))
 			return
 		}
-		obj, err := GetUserByToken(token)
+		obj, err := controller.GetUserByToken(token)
 		resolveResponse(obj, err, context)
 	})
 }
 
-func resolveResponse(obj any, err *error.AppError, context *gin.Context) {
+func resolveResponse(obj any, err *custom_error.AppError, context *gin.Context) {
 	if err != nil {
 		context.JSON(err.HttpErrorCode, err.Message)
 	} else {

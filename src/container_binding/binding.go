@@ -1,27 +1,19 @@
 package container_binding
 
 import (
+	"auth-service/src/controller"
 	"auth-service/src/dao"
-	"auth-service/src/error"
+	"auth-service/src/service"
 	"github.com/golobby/container/v3"
+	"gorm.io/gorm"
 )
 
-func SetUbBinding() {
-	container.Singleton(func() dao.UserDatabase {
-		return &dao.UserDao{}
+func SetUbBinding(db *gorm.DB) {
+	userDao := dao.NewUserDao(db)
+	authService := service.NewAuthService(userDao)
+	authController := controller.NewAuthController(authService)
+
+	container.Singleton(func() controller.AuthController {
+		return authController
 	})
-}
-
-func ResolveUserDao() (dao.UserDatabase, *error.AppError) {
-	var db dao.UserDatabase
-	containerErr := container.Resolve(&db)
-	if containerErr != nil {
-		return nil, &error.AppError{
-			Error:         containerErr,
-			Message:       "UserDatabase impl is not fount",
-			HttpErrorCode: 501,
-		}
-	}
-
-	return db, nil
 }

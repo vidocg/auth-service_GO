@@ -1,19 +1,27 @@
 package controller
 
 import (
-	"auth-service/src/error"
+	"auth-service/src/custom_error"
 	"auth-service/src/models"
 	"auth-service/src/service"
 )
 
-func GenerateToken(req *models.AuthRequest) (*models.AuthResponse, *error.AppError) {
-	return service.GenerateToken(req)
+type AuthControllerImpl struct {
+	authService service.AuthService
 }
 
-func SaveUser(req models.User) (*models.User, *error.AppError) {
-	return service.SaveUser(req)
+func NewAuthController(authService service.AuthService) AuthController {
+	return AuthControllerImpl{authService}
 }
 
-func GetUserByToken(tokenString string) (*models.User, *error.AppError) {
-	return service.GetUserByToken(tokenString)
+func (ac AuthControllerImpl) GenerateToken(req *models.AuthRequest) (*models.AuthResponse, *custom_error.AppError) {
+	return ac.authService.GenerateToken(req)
+}
+
+func (ac AuthControllerImpl) SaveUser(req models.User) (*models.User, *custom_error.AppError) {
+	return ac.authService.SaveUser(req)
+}
+
+func (ac AuthControllerImpl) GetUserByToken(tokenString string) (*models.User, *custom_error.AppError) {
+	return ac.authService.GetUserByToken(tokenString)
 }

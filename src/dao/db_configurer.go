@@ -8,9 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var Database *gorm.DB
-
-func Configure(config *config.Config) {
+func Configure(config *config.Config) *gorm.DB {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai", config.DBHost, config.DBUserName, config.DBUserPassword, config.DBName, config.DBPort)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -22,5 +20,5 @@ func Configure(config *config.Config) {
 
 	// Migrate the schema
 	db.AutoMigrate(&models.User{})
-	Database = db
+	return db
 }
