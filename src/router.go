@@ -1,7 +1,7 @@
 package main
 
 import (
-	"auth-service/src/container_binding"
+	"auth-service/src/application_context"
 	"auth-service/src/custom_error"
 	"auth-service/src/models"
 	"fmt"
@@ -10,7 +10,7 @@ import (
 )
 
 func InitRoutes(r *gin.Engine) {
-	controller := container_binding.ResolveAuthController()
+	controller := application_context.ResolveAuthController()
 	r.POST("/token", func(context *gin.Context) {
 		authRequest := &models.AuthRequest{}
 		err := context.BindJSON(authRequest)

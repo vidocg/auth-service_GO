@@ -1,24 +1,20 @@
 package main
 
 import (
+	"auth-service/src/application_context"
 	"auth-service/src/config"
-	"auth-service/src/container_binding"
-	"auth-service/src/dao"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	r := gin.Default()
-
 	conf, err := config.LoadConfig(".")
 	if err != nil {
 		panic("Cannot load config")
 	}
 
-	db := dao.Configure(&conf)
+	application_context.LoadContext(&conf)
 
-	container_binding.SetUbBinding(db)
-
+	r := gin.Default()
 	InitRoutes(r)
 	r.Run(":9993")
 }

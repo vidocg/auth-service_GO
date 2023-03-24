@@ -1,4 +1,4 @@
-package container_binding
+package application_context
 
 import (
 	"auth-service/src/controller"
