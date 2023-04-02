@@ -14,9 +14,9 @@ add to zversion.go
 const StackGuardMultiplierDefault = 1 
 const theVersion = `{go version}` 
 
-{theVersion for me was go1.20.2}
+(theVersion for me was go1.20.2)
  
- Then you need to invoke File | Settings | Go | GOROOT, select Local and specify the path to the Go SDK.
+Then you need to invoke File | Settings | Go | GOROOT, select Local and specify the path to the Go SDK.
  
 #'go' is not recognized as an internal or external command
 You need to go to system properties / env varible and add to Path : C:\Users\{user}\sdk\{go package}\bin
@@ -25,7 +25,7 @@ Also, you can read some useful information about syncing dependencies etc here
 'https://www.jetbrains.com/help/go/create-a-project-with-go-modules-integration.html#notify-about-replacements-of-local-paths-in-go-mod-file'
 
 #Postman
-You can use `GO AUTH.postman_collection.json` to trigger auth endpoints
+You can use `AUTH.postman_collection.json` to trigger auth endpoints
 
 #Swagger
 to update swagger docs use `swag init -g src/main.go`
