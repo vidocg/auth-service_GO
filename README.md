@@ -23,3 +23,6 @@ You need to go to system properties / env varible and add to Path : C:\Users\{us
 
 Also, you can read some useful information about syncing dependencies etc here 
 'https://www.jetbrains.com/help/go/create-a-project-with-go-modules-integration.html#notify-about-replacements-of-local-paths-in-go-mod-file'
+
+#Postman
+You can use `GO AUTH.postman_collection.json` to trigger auth endpoints
