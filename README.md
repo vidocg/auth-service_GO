@@ -26,3 +26,7 @@ Also, you can read some useful information about syncing dependencies etc here
 
 #Postman
 You can use `GO AUTH.postman_collection.json` to trigger auth endpoints
+
+#Swagger
+to update swagger docs use `swag init -g src/main.go`
+swagger url : `http://localhost:9993/swagger/index.html`
