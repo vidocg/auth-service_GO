@@ -8,6 +8,6 @@ type UserDto struct {
 	RefreshToken string
 }
 type UserCreateDto struct {
-	Password string `gorm:"type:varchar(255);not null"`
-	Email    string `gorm:"uniqueIndex;not null"`
+	Password string `validate:"required"`
+	Email    string `validate:"email"`
 }

@@ -2,16 +2,18 @@ package controller
 
 import (
 	"auth-service/src/custom_error"
+	"auth-service/src/custom_validator"
 	"auth-service/src/models"
 	"auth-service/src/service"
 )
 
 type AuthControllerImpl struct {
 	authService service.AuthService
+	validator   custom_validator.CustomValidator
 }
 
 func NewAuthController(authService service.AuthService) AuthController {
-	return AuthControllerImpl{authService}
+	return AuthControllerImpl{authService: authService, validator: custom_validator.NewValidator()}
 }
 
 func (ac AuthControllerImpl) GenerateToken(req *models.AuthRequest) (*models.AuthResponse, *custom_error.AppError) {
@@ -19,6 +21,10 @@ func (ac AuthControllerImpl) GenerateToken(req *models.AuthRequest) (*models.Aut
 }
 
 func (ac AuthControllerImpl) SaveUser(req models.UserCreateDto) (*models.UserDto, *custom_error.AppError) {
+	err := ac.validator.Validate(&req)
+	if err != nil {
+		return nil, err
+	}
 	return ac.authService.SaveUser(req)
 }
 
