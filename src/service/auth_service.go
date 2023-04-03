@@ -39,8 +39,8 @@ func (as AuthServiceImpl) GenerateToken(req *models.AuthRequest) (*models.AuthRe
 	return &models.AuthResponse{Jwt: token, Refresh: refreshToken}, nil
 }
 
-func (as AuthServiceImpl) SaveUser(user models.User) (*models.User, *custom_error.AppError) {
-	hash, err := util.HashPassword(user.Password)
+func (as AuthServiceImpl) SaveUser(userCreateDto models.UserCreateDto) (*models.UserDto, *custom_error.AppError) {
+	hash, err := util.HashPassword(userCreateDto.Password)
 	if err != nil {
 		return nil, &custom_error.AppError{
 			Error:         err,
@@ -48,9 +48,15 @@ func (as AuthServiceImpl) SaveUser(user models.User) (*models.User, *custom_erro
 			HttpErrorCode: 400,
 		}
 	}
-	user.Password = hash
-	savedUser := as.db.SaveUser(user)
-	return &savedUser, nil
+	userCreateDto.Password = hash
+	userToSave := models.User{}
+
+	_ = as.mapper.Mapper(&userCreateDto, &userToSave)
+
+	savedUser := as.db.SaveUser(userToSave)
+	dto := &models.UserDto{}
+	_ = as.mapper.Mapper(&savedUser, dto)
+	return dto, nil
 }
 
 func (as AuthServiceImpl) getUserByEmail(email string) (*models.User, *custom_error.AppError) {

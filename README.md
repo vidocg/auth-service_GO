@@ -29,4 +29,5 @@ You can use `AUTH.postman_collection.json` to trigger auth endpoints
 
 #Swagger
 to update swagger docs use `swag init -g src/main.go`
+(if it doesn't work please use `go install github.com/swaggo/swag/cmd/swag@latest` before)
 swagger url : `http://localhost:9993/swagger/index.html`

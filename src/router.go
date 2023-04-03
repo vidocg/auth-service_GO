@@ -13,7 +13,6 @@ import (
 	"net/http"
 )
 
-// ShowAccount godoc
 // @Summary      generates token
 // @Description  get token by creds
 // @Tags         token
@@ -36,6 +35,49 @@ func getToken(context *gin.Context, controller controller.AuthController) {
 	resolveResponse(obj, saveErr, context)
 }
 
+// @Summary      saves new user
+// @Description  saves new user
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param UserCreateDto body models.UserCreateDto true "UserCreateDto"
+// @Success      200  {object}  models.UserDto
+// @Failure      400  {object}  custom_error.AppError
+// @Failure      404  {object}  custom_error.AppError
+// @Failure      500  {object}  custom_error.AppError
+// @Router       /user [post]
+func saveUser(context *gin.Context, controller controller.AuthController) {
+	user := &models.UserCreateDto{}
+	err := context.BindJSON(user)
+	if err != nil {
+		context.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	obj, saveErr := controller.SaveUser(*user)
+	resolveResponse(obj, saveErr, context)
+}
+
+// @Summary      Returns user dto
+// @Description  get existing user by valid token
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param token query string true "valid jwt"
+// @Success      200  {object}  models.UserDto
+// @Failure      400  {object}  custom_error.AppError
+// @Failure      404  {object}  custom_error.AppError
+// @Failure      500  {object}  custom_error.AppError
+// @Router       /user [get]
+func getUserByToken(context *gin.Context, controller controller.AuthController) {
+	token := context.Query("token")
+	if &token == nil {
+		context.AbortWithError(http.StatusBadRequest, fmt.Errorf("jwt is null"))
+		return
+	}
+	obj, err := controller.GetUserByToken(token)
+	resolveResponse(obj, err, context)
+}
+
 func InitRoutes(r *gin.Engine) {
 	controller := application_context.ResolveAuthController()
 	r.POST("/token", func(context *gin.Context) {
@@ -43,24 +85,11 @@ func InitRoutes(r *gin.Engine) {
 	})
 
 	r.POST("/user", func(context *gin.Context) {
-		user := &models.User{}
-		err := context.BindJSON(user)
-		if err != nil {
-			context.AbortWithError(http.StatusBadRequest, err)
-			return
-		}
-		obj, saveErr := controller.SaveUser(*user)
-		resolveResponse(obj, saveErr, context)
+		saveUser(context, controller)
 	})
 
 	r.GET("/user", func(context *gin.Context) {
-		token := context.Query("token")
-		if &token == nil {
-			context.AbortWithError(http.StatusBadRequest, fmt.Errorf("jwt is null"))
-			return
-		}
-		obj, err := controller.GetUserByToken(token)
-		resolveResponse(obj, err, context)
+		getUserByToken(context, controller)
 	})
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

@@ -21,6 +21,22 @@ definitions:
       refresh:
         type: string
     type: object
+  models.UserCreateDto:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  models.UserDto:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      refreshToken:
+        type: string
+    type: object
 host: localhost:9993
 info:
   contact: {}
@@ -63,4 +79,70 @@ paths:
       summary: generates token
       tags:
       - token
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: get existing user by valid token
+      parameters:
+      - description: valid jwt
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+      summary: Returns user dto
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: saves new user
+      parameters:
+      - description: UserCreateDto
+        in: body
+        name: UserCreateDto
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserCreateDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+      summary: saves new user
+      tags:
+      - user
 swagger: "2.0"

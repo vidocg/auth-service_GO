@@ -18,7 +18,7 @@ func (ac AuthControllerImpl) GenerateToken(req *models.AuthRequest) (*models.Aut
 	return ac.authService.GenerateToken(req)
 }
 
-func (ac AuthControllerImpl) SaveUser(req models.User) (*models.User, *custom_error.AppError) {
+func (ac AuthControllerImpl) SaveUser(req models.UserCreateDto) (*models.UserDto, *custom_error.AppError) {
 	return ac.authService.SaveUser(req)
 }
 
