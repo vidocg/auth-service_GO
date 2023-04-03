@@ -22,6 +22,6 @@ func (ac AuthControllerImpl) SaveUser(req models.User) (*models.User, *custom_er
 	return ac.authService.SaveUser(req)
 }
 
-func (ac AuthControllerImpl) GetUserByToken(tokenString string) (*models.User, *custom_error.AppError) {
+func (ac AuthControllerImpl) GetUserByToken(tokenString string) (*models.UserDto, *custom_error.AppError) {
 	return ac.authService.GetUserByToken(tokenString)
 }

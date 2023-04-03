@@ -6,14 +6,16 @@ import (
 	"auth-service/src/models"
 	"auth-service/src/util"
 	"fmt"
+	"github.com/devfeel/mapper"
 )
 
 type AuthServiceImpl struct {
-	db dao.UserDatabase
+	db     dao.UserDatabase
+	mapper mapper.IMapper
 }
 
 func NewAuthService(db dao.UserDatabase) AuthService {
-	return AuthServiceImpl{db}
+	return AuthServiceImpl{db, mapper.NewMapper()}
 }
 
 func (as AuthServiceImpl) GenerateToken(req *models.AuthRequest) (*models.AuthResponse, *custom_error.AppError) {
@@ -63,7 +65,7 @@ func (as AuthServiceImpl) getUserByEmail(email string) (*models.User, *custom_er
 	return &user, nil
 }
 
-func (as AuthServiceImpl) GetUserByToken(tokenString string) (*models.User, *custom_error.AppError) {
+func (as AuthServiceImpl) GetUserByToken(tokenString string) (*models.UserDto, *custom_error.AppError) {
 	email, err := util.VerifyJwt(tokenString)
 	if err != nil {
 		return nil, &custom_error.AppError{
@@ -74,5 +76,7 @@ func (as AuthServiceImpl) GetUserByToken(tokenString string) (*models.User, *cus
 	}
 
 	user := as.db.FindByEmail(email)
-	return &user, nil
+	dto := &models.UserDto{}
+	_ = as.mapper.Mapper(&user, dto)
+	return dto, nil
 }

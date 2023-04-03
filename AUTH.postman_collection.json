@@ -1,0 +1,88 @@
+{
+	"info": {
+		"_postman_id": "95c501f3-43ac-413f-ac06-810f61d5b448",
+		"name": "GO AUTH",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8152872"
+	},
+	"item": [
+		{
+			"name": "save user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Password\" : \"123321\",\r\n    \"Email\" : \"test@email.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9993/user",
+					"host": [
+						"localhost"
+					],
+					"port": "9993",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getToken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Password\" : \"123321\",\r\n    \"Email\" : \"test@email.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9993/token",
+					"host": [
+						"localhost"
+					],
+					"port": "9993",
+					"path": [
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserByToken",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9993/user?token=eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOiIyMDIzLTAzLTA3VDE0OjI5OjE2LjQxNzc2MzIrMDE6MDAiLCJ1c2VyIjoidGVzdEBlbWFpbC5jb20ifQ",
+					"host": [
+						"localhost"
+					],
+					"port": "9993",
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOiIyMDIzLTAzLTA3VDE0OjI5OjE2LjQxNzc2MzIrMDE6MDAiLCJ1c2VyIjoidGVzdEBlbWFpbC5jb20ifQ"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
