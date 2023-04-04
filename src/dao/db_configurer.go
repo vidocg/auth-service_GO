@@ -2,8 +2,12 @@ package dao
 
 import (
 	"auth-service/src/config"
-	"auth-service/src/models"
+	"database/sql"
 	"fmt"
+	"github.com/golang-migrate/migrate/v4"
+	migratePostgres "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -19,6 +23,16 @@ func Configure(config *config.Config) *gorm.DB {
 	db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"")
 
 	// Migrate the schema
-	db.AutoMigrate(&models.User{})
+	//db.AutoMigrate(&models.User{})
+	migrateDb(config)
+
 	return db
+}
+
+func migrateDb(config *config.Config) {
+	databaseUrl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", config.DBUserName, config.DBUserPassword, config.DBHost, config.DBPort, config.DBName)
+	db, _ := sql.Open("postgres", databaseUrl)
+	driver, _ := migratePostgres.WithInstance(db, &migratePostgres.Config{})
+	m, _ := migrate.NewWithDatabaseInstance(config.MigrationFolder, config.DBName, driver)
+	m.Up()
 }
