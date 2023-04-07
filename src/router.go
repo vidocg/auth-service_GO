@@ -8,6 +8,7 @@ import (
 	"auth-service/src/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/markbates/goth/gothic"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 	"net/http"
@@ -93,6 +94,27 @@ func InitRoutes(r *gin.Engine) {
 	})
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	r.GET("/auth/google", func(context *gin.Context) {
+		req := context.Request
+		v := req.URL.Query()
+		v.Add("provider", "google")
+		req.URL.RawQuery = v.Encode()
+
+		gothic.BeginAuthHandler(context.Writer, context.Request)
+	})
+
+	r.GET("/auth/google/callback", func(context *gin.Context) {
+		user, err := gothic.CompleteUserAuth(context.Writer, context.Request)
+
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println("Google user:")
+		fmt.Println(user)
+	})
+
 }
 
 func resolveResponse(obj any, err *custom_error.AppError, context *gin.Context) {

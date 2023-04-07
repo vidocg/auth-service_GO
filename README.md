@@ -59,5 +59,14 @@ For validation go-playground/validator is used. You can use custom wrapper: `cus
 ## Mapper
 For dto->entity\entity->dto mapping devfeel/mapper is used. Link: `https://github.com/devfeel/mapper` 
 
+## Social network registration
+For integration with google markbates/goth is used. Link: https://github.com/markbates/goth
+To set up authentication through google you need to 
+set up client on the google page : https://console.cloud.google.com/apis/credentials
+add GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET and GOOGLE_AUTH_CALLBACK to
+app.env NB!!! **GOOGLE_AUTH_CALLBACK** should have same value that you have used in google console
+Use http://localhost:9993/auth/google in bowser with locally running service to be redirected to google auth form
+
+
 # Environment variables
 For the development is used [app.env](app.env) from the root which is parsed on bootstrap by spf13/viper. Link: `https://github.com/spf13/viper`
