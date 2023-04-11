@@ -70,3 +70,6 @@ Use http://localhost:9993/auth/google in bowser with locally running service to 
 
 # Environment variables
 For the development is used [app.env](app.env) from the root which is parsed on bootstrap by spf13/viper. Link: `https://github.com/spf13/viper`
+
+# Logging
+For the logging purposes is used `zap` with under custom interface `ZapCustomLogger`. Link: `https://github.com/uber-go/zap`

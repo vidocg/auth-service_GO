@@ -9,7 +9,6 @@ import (
 // @title           Auth service
 // @version         1.0
 // @description     Microservice that is developed for authorization and authentication purposes
-
 // @host      localhost:9993
 func main() {
 	conf, err := config.LoadConfig(".")
