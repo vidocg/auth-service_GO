@@ -94,3 +94,17 @@ func (as AuthServiceImpl) GetUserByToken(tokenString string) (*models.UserDto, *
 	as.logger.Info("Get user by token ended")
 	return dto, nil
 }
+
+func (as AuthServiceImpl) LogInThroughSocialNetwork(user models.SocialNetworkUser) *models.AuthResponse {
+	as.logger.Info("LogIn trough social network started. User: " + fmt.Sprintf("%v", user))
+	dbUser := as.db.FindByEmail(user.Email)
+	if &dbUser == nil {
+		dbUser = models.User{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName}
+	}
+
+	token, refreshToken := util.GenerateJwt(dbUser)
+	dbUser.RefreshToken = refreshToken
+	as.db.SaveUser(dbUser)
+	as.logger.Info("LogIn trough social network ended")
+	return &models.AuthResponse{Jwt: token, Refresh: refreshToken}
+}

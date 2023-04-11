@@ -135,14 +135,26 @@ func getGoogleAuthPage(context *gin.Context) {
 // @Failure      500  {object}  custom_error.AppError
 // @Router       /auth/google/callback [get]
 func getGoogleAuthCallback(context *gin.Context) {
+	authService := application_context.ResolveAuthService()
 	user, err := gothic.CompleteUserAuth(context.Writer, context.Request)
-
 	if err != nil {
-		fmt.Println(err)
+		resolveResponse(
+			nil,
+			&custom_error.AppError{Message: "Login through google is failed", HttpErrorCode: 400, Error: err},
+			context,
+		)
 		return
 	}
-	fmt.Println("Google user:")
-	fmt.Println(user)
+
+	authResponse := authService.LogInThroughSocialNetwork(
+		models.SocialNetworkUser{
+			Email:     user.Email,
+			FirstName: user.FirstName,
+			LastName:  user.LastName,
+		},
+	)
+
+	resolveResponse(authResponse, nil, context)
 }
 
 func InitRoutes(r *gin.Engine) {
@@ -165,7 +177,9 @@ func InitRoutes(r *gin.Engine) {
 
 	r.GET("/auth/google/url", getGoogleAuthPage)
 
-	r.GET("/auth/google/callback", getGoogleAuthCallback)
+	r.GET("/auth/google/callback", func(context *gin.Context) {
+		getGoogleAuthCallback(context)
+	})
 
 }
 

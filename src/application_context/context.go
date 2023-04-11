@@ -28,4 +28,8 @@ func LoadContext(config *config.Config) {
 	container.Singleton(func() controller.AuthController {
 		return authController
 	})
+
+	container.Singleton(func() service.AuthService {
+		return authService
+	})
 }

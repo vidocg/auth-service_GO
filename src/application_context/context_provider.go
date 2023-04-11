@@ -2,6 +2,7 @@ package application_context
 
 import (
 	"auth-service/src/controller"
+	"auth-service/src/service"
 	"github.com/golobby/container/v3"
 )
 
@@ -13,4 +14,13 @@ func ResolveAuthController() controller.AuthController {
 	}
 
 	return authController
+}
+func ResolveAuthService() service.AuthService {
+	var authService service.AuthService
+	containerErr := container.Resolve(&authService)
+	if containerErr != nil {
+		panic("AuthService impl is not fount")
+	}
+
+	return authService
 }
