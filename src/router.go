@@ -79,6 +79,46 @@ func getUserByToken(context *gin.Context, controller controller.AuthController) 
 	resolveResponse(obj, err, context)
 }
 
+// @Summary      Google auth
+// @Description  Redirects user to google auth page
+// @Tags         auth
+// @Accept       json
+// @Success      302
+// @Failure      400  {object}  custom_error.AppError
+// @Failure      404  {object}  custom_error.AppError
+// @Failure      500  {object}  custom_error.AppError
+// @Router       /auth/google [get]
+func redirectToGoogleAuthPage(context *gin.Context) {
+	req := context.Request
+	v := req.URL.Query()
+	v.Add("provider", "google")
+	req.URL.RawQuery = v.Encode()
+
+	gothic.BeginAuthHandler(context.Writer, context.Request)
+}
+
+// @Summary      Google auth
+// @Description  Returns google auth url
+// @Tags         auth
+// @Accept       json
+// @Success      200  {string}  string
+// @Failure      400  {object}  custom_error.AppError
+// @Failure      404  {object}  custom_error.AppError
+// @Failure      500  {object}  custom_error.AppError
+// @Router       /auth/google/url [get]
+func getGoogleAuthPage(context *gin.Context) {
+	req := context.Request
+	v := req.URL.Query()
+	v.Add("provider", "google")
+	req.URL.RawQuery = v.Encode()
+	url, err := gothic.GetAuthURL(context.Writer, context.Request)
+	var appErr *custom_error.AppError = nil
+	if err != nil {
+		appErr = &custom_error.AppError{Message: "google auth failed", Error: err, HttpErrorCode: 400}
+	}
+
+	resolveResponse(url, appErr, context)
+}
 func InitRoutes(r *gin.Engine) {
 	controller := application_context.ResolveAuthController()
 	r.POST("/token", func(context *gin.Context) {
@@ -95,14 +135,9 @@ func InitRoutes(r *gin.Engine) {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	r.GET("/auth/google", func(context *gin.Context) {
-		req := context.Request
-		v := req.URL.Query()
-		v.Add("provider", "google")
-		req.URL.RawQuery = v.Encode()
+	r.GET("/auth/google", redirectToGoogleAuthPage)
 
-		gothic.BeginAuthHandler(context.Writer, context.Request)
-	})
+	r.GET("/auth/google/url", getGoogleAuthPage)
 
 	r.GET("/auth/google/callback", func(context *gin.Context) {
 		user, err := gothic.CompleteUserAuth(context.Writer, context.Request)

@@ -27,6 +27,8 @@ definitions:
         type: string
       password:
         type: string
+    required:
+    - password
     type: object
   models.UserDto:
     properties:
@@ -45,6 +47,54 @@ info:
   title: Auth service
   version: "1.0"
 paths:
+  /auth/google:
+    get:
+      consumes:
+      - application/json
+      description: Redirects user to google auth page
+      responses:
+        "302":
+          description: Found
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+      summary: Google auth
+      tags:
+      - auth
+  /auth/google/url:
+    get:
+      consumes:
+      - application/json
+      description: Returns google auth url
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/custom_error.AppError'
+      summary: Google auth
+      tags:
+      - auth
   /token:
     post:
       consumes:
