@@ -119,6 +119,35 @@ func getGoogleAuthPage(context *gin.Context) {
 
 	resolveResponse(url, appErr, context)
 }
+
+// @Summary      Completes auth through google
+// @Description  authenticate exiting or create a new user
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param code query string true
+// @Param scope query string true
+// @Param authuser query string true
+// @Param prompt query string true
+// @Success      200  {object}  models.AuthResponse
+// @Failure      400  {object}  custom_error.AppError
+// @Failure      404  {object}  custom_error.AppError
+// @Failure      500  {object}  custom_error.AppError
+// @Router       /auth/google/callback [get]
+func getGoogleAuthCallback(context *gin.Context) {
+	fmt.Println("RequestBody")
+	fmt.Println(context.Request.Body)
+	fmt.Println(context.Request.URL.Query())
+	user, err := gothic.CompleteUserAuth(context.Writer, context.Request)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Google user:")
+	fmt.Println(user)
+}
+
 func InitRoutes(r *gin.Engine) {
 	controller := application_context.ResolveAuthController()
 	r.POST("/token", func(context *gin.Context) {
@@ -139,16 +168,7 @@ func InitRoutes(r *gin.Engine) {
 
 	r.GET("/auth/google/url", getGoogleAuthPage)
 
-	r.GET("/auth/google/callback", func(context *gin.Context) {
-		user, err := gothic.CompleteUserAuth(context.Writer, context.Request)
-
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Println("Google user:")
-		fmt.Println(user)
-	})
+	r.GET("/auth/google/callback", getGoogleAuthCallback)
 
 }
 
