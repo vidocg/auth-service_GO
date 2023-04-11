@@ -135,9 +135,6 @@ func getGoogleAuthPage(context *gin.Context) {
 // @Failure      500  {object}  custom_error.AppError
 // @Router       /auth/google/callback [get]
 func getGoogleAuthCallback(context *gin.Context) {
-	fmt.Println("RequestBody")
-	fmt.Println(context.Request.Body)
-	fmt.Println(context.Request.URL.Query())
 	user, err := gothic.CompleteUserAuth(context.Writer, context.Request)
 
 	if err != nil {
