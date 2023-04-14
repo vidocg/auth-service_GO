@@ -19,3 +19,9 @@ services:
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80"
+  auth-service:
+    environment:
+      POSTGRES_HOST: db
+    build: .
+    ports:
+      - "9993:9993"

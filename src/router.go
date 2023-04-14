@@ -158,6 +158,8 @@ func getGoogleAuthCallback(context *gin.Context) {
 }
 
 func InitRoutes(r *gin.Engine) {
+	logger := application_context.ResolveLogger()
+	logger.Info("Initiating routes")
 	controller := application_context.ResolveAuthController()
 	r.POST("/token", func(context *gin.Context) {
 		getToken(context, controller)
@@ -180,7 +182,7 @@ func InitRoutes(r *gin.Engine) {
 	r.GET("/auth/google/callback", func(context *gin.Context) {
 		getGoogleAuthCallback(context)
 	})
-
+	logger.Info("Routes initiated")
 }
 
 func resolveResponse(obj any, err *custom_error.AppError, context *gin.Context) {

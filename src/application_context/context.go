@@ -15,10 +15,12 @@ import (
 func LoadContext(config *config.Config) {
 	logger, _ := zap.NewDevelopment()
 	defer logger.Sync()
+	customLogger := util.ZapCustomLogger{Logger: *logger}
+	customLogger.Info("Loading context")
 
 	db := dao.Configure(config)
 	userDao := dao.NewUserDao(db)
-	authService := service.NewAuthService(userDao, util.ZapCustomLogger{Logger: *logger})
+	authService := service.NewAuthService(userDao, customLogger)
 	authController := controller.NewAuthController(authService)
 
 	goth.UseProviders(
@@ -32,4 +34,10 @@ func LoadContext(config *config.Config) {
 	container.Singleton(func() service.AuthService {
 		return authService
 	})
+
+	container.Singleton(func() util.CustomLogger {
+		return customLogger
+	})
+
+	customLogger.Info("Context loaded")
 }

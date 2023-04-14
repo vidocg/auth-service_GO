@@ -3,6 +3,7 @@ package application_context
 import (
 	"auth-service/src/controller"
 	"auth-service/src/service"
+	"auth-service/src/util"
 	"github.com/golobby/container/v3"
 )
 
@@ -15,6 +16,7 @@ func ResolveAuthController() controller.AuthController {
 
 	return authController
 }
+
 func ResolveAuthService() service.AuthService {
 	var authService service.AuthService
 	containerErr := container.Resolve(&authService)
@@ -23,4 +25,14 @@ func ResolveAuthService() service.AuthService {
 	}
 
 	return authService
+}
+
+func ResolveLogger() util.CustomLogger {
+	var logger util.CustomLogger
+	containerErr := container.Resolve(&logger)
+	if containerErr != nil {
+		panic("Custom logger impl is not fount")
+	}
+
+	return logger
 }
