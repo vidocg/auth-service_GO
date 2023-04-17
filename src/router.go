@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/markbates/goth/gothic"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 	"net/http"
@@ -157,6 +158,14 @@ func getGoogleAuthCallback(context *gin.Context) {
 	resolveResponse(authResponse, nil, context)
 }
 
+func prometheusHandler() gin.HandlerFunc {
+	h := promhttp.Handler()
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
 func InitRoutes(r *gin.Engine) {
 	logger := application_context.ResolveLogger()
 	logger.Info("Initiating routes")
@@ -182,6 +191,8 @@ func InitRoutes(r *gin.Engine) {
 	r.GET("/auth/google/callback", func(context *gin.Context) {
 		getGoogleAuthCallback(context)
 	})
+
+	r.GET("/metrics", prometheusHandler())
 	logger.Info("Routes initiated")
 }
 

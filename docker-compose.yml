@@ -25,3 +25,9 @@ services:
     build: .
     ports:
       - "9993:9993"
+  grafana:
+    image: grafana/grafana-enterprise:8.2.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana-provisioning:/etc/grafana/provisioning

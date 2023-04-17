@@ -1,0 +1,28 @@
+apiVersion: 1
+
+deleteDatasources:
+  - name: auth-service
+    orgId: 1
+
+datasources:
+  - name: auth-service
+    type: influxdb
+    access: proxy
+    url: http://localhost:9993/metrics
+    password:
+    user:
+    database: auth-service
+    basicAuth: false
+    basicAuthUser:
+    basicAuthPassword:
+    withCredentials:
+    isDefault: true
+    jsonData:
+      tlsAuth: false
+      tlsAuthWithCACert: false
+    secureJsonData:
+      tlsCACert: ""
+      tlsClientCert: ""
+      tlsClientKey: ""
+    version: 1
+    editable: true

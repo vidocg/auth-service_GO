@@ -5,6 +5,7 @@
 * [Swagger](#swagger)
 * [Libraries that used](#libraries-that-used)
 * [Environment variables that used](#environment-variables)
+* [Metrics](#metrics)
 
 # Docker compose
 
@@ -73,3 +74,15 @@ For the development is used [app.env](app.env) from the root which is parsed on 
 
 # Logging
 For the logging purposes is used `zap` with under custom interface `ZapCustomLogger`. Link: `https://github.com/uber-go/zap`
+
+## Metrics
+
+# Prometeus 
+Link on documentation: `https://prometheus.io/docs/guides/go-application/`
+Metrics data is available on `/metrics` (http://localhost:9993/metrics)
+
+# Grafana
+For metrics visualization Grafana image `grafana/grafana-enterprise:8.2.0` is used. Link: `https://grafana.com/docs/grafana/latest/datasources/`
+It picks configuration automatically as it is set up in docker-compose ([docker configuration](grafana-provisioning/datasources/automatic.yml))
+Datasource is only configured to use auth service on localhost:9993 for now
+Default creds are admin:admin
