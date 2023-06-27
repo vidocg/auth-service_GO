@@ -1,10 +1,10 @@
 package service
 
 import (
-	"auth-service/src/custom_error"
-	"auth-service/src/dao"
-	"auth-service/src/models"
-	"auth-service/src/util"
+	"auth-service/internal/custom_error"
+	"auth-service/internal/dao"
+	"auth-service/internal/models"
+	"auth-service/internal/util"
 	"fmt"
 	"github.com/devfeel/mapper"
 )

@@ -1,11 +1,11 @@
 package application_context
 
 import (
-	"auth-service/src/config"
-	"auth-service/src/controller"
-	"auth-service/src/dao"
-	"auth-service/src/service"
-	"auth-service/src/util"
+	"auth-service/internal/config"
+	"auth-service/internal/controller"
+	"auth-service/internal/dao"
+	"auth-service/internal/service"
+	"auth-service/internal/util"
 	"github.com/golobby/container/v3"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/google"

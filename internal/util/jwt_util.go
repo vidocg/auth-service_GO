@@ -1,7 +1,7 @@
 package util
 
 import (
-	"auth-service/src/models"
+	"auth-service/internal/models"
 	"fmt"
 	"github.com/golang-jwt/jwt"
 	"log"

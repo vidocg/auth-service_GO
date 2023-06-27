@@ -1,9 +1,9 @@
 package application_context
 
 import (
-	"auth-service/src/controller"
-	"auth-service/src/service"
-	"auth-service/src/util"
+	"auth-service/internal/controller"
+	"auth-service/internal/service"
+	"auth-service/internal/util"
 	"github.com/golobby/container/v3"
 )
 

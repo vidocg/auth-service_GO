@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"auth-service/src/models"
+	"auth-service/internal/models"
 	"gorm.io/gorm"
 )
 

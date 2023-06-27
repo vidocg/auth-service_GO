@@ -1,11 +1,11 @@
-package main
+package http
 
 import (
 	_ "auth-service/docs" //is needed for swagger
-	"auth-service/src/application_context"
-	"auth-service/src/controller"
-	"auth-service/src/custom_error"
-	"auth-service/src/models"
+	"auth-service/internal/application_context"
+	"auth-service/internal/controller"
+	"auth-service/internal/custom_error"
+	"auth-service/internal/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/markbates/goth/gothic"

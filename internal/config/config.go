@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/spf13/viper"
+	"os"
 )
 
 type Config struct {
@@ -18,9 +19,13 @@ type Config struct {
 }
 
 func LoadConfig(path string) (config Config, err error) {
+	profile := os.Getenv("PROFILE")
+	if profile == "" {
+		profile = "local"
+	}
 	viper.AddConfigPath(path)
 	viper.SetConfigType("env")
-	viper.SetConfigName("app")
+	viper.SetConfigName(profile)
 	viper.AutomaticEnv()
 
 	err = viper.ReadInConfig()

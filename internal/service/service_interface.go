@@ -1,8 +1,8 @@
 package service
 
 import (
-	"auth-service/src/custom_error"
-	"auth-service/src/models"
+	"auth-service/internal/custom_error"
+	"auth-service/internal/models"
 )
 
 type AuthService interface {

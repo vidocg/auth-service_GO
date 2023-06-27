@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"auth-service/src/custom_error"
-	"auth-service/src/custom_validator"
-	"auth-service/src/models"
-	"auth-service/src/service"
+	"auth-service/internal/custom_error"
+	"auth-service/internal/custom_validator"
+	"auth-service/internal/models"
+	"auth-service/internal/service"
 )
 
 type AuthControllerImpl struct {

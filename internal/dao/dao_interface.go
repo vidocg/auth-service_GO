@@ -1,6 +1,6 @@
 package dao
 
-import "auth-service/src/models"
+import "auth-service/internal/models"
 
 type UserDatabase interface {
 	FindByEmail(email string) models.User

@@ -5,6 +5,7 @@
 * [Swagger](#swagger)
 * [Libraries that used](#libraries-that-used)
 * [Environment variables that used](#environment-variables)
+* [Profiles](#Profiles)
 * [Metrics](#metrics)
 
 # Docker compose
@@ -68,9 +69,15 @@ add GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET and GOOGLE_AUTH_CALLBACK to
 app.env NB!!! **GOOGLE_AUTH_CALLBACK** should have same value that you have used in google console
 Use http://localhost:9993/auth/google in bowser with locally running service to be redirected to google auth form
 
-
 # Environment variables
-For the development is used [app.env](app.env) from the root which is parsed on bootstrap by spf13/viper. Link: `https://github.com/spf13/viper`
+For the development is used [local.env](local.env) from the root which is parsed on bootstrap by spf13/viper. Link: `https://github.com/spf13/viper`
+
+# Profiles
+By default `local` profile is used by spf13/viper that is taken from root `local.env`. If you want to add new profile you 
+should add `{profile}.env` to root and path `PROFILE` as environment variable
+to 
+# Build 
+executable with different profile you need to run in the shell under src directory `go build -o ..`
 
 # Logging
 For the logging purposes is used `zap` with under custom interface `ZapCustomLogger`. Link: `https://github.com/uber-go/zap`
