@@ -6,6 +6,7 @@ import (
 	"auth-service/internal/models"
 	"auth-service/internal/util"
 	"fmt"
+
 	"github.com/devfeel/mapper"
 )
 
@@ -56,7 +57,10 @@ func (as AuthServiceImpl) SaveUser(userCreateDto models.UserCreateDto) (*models.
 
 	_ = as.mapper.Mapper(&userCreateDto, &userToSave)
 
-	savedUser := as.db.SaveUser(userToSave)
+	savedUser, customErr := as.db.SaveUser(userToSave)
+	if customErr != nil {
+		return nil, customErr
+	}
 	dto := &models.UserDto{}
 	_ = as.mapper.Mapper(&savedUser, dto)
 	as.logger.Info("Save user request ended")

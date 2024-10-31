@@ -1,7 +1,10 @@
 package dao
 
 import (
+	"auth-service/internal/custom_error"
 	"auth-service/internal/models"
+	"fmt"
+
 	"gorm.io/gorm"
 )
 
@@ -19,7 +22,14 @@ func (ud UserDao) FindByEmail(email string) models.User {
 	return user
 }
 
-func (ud UserDao) SaveUser(user models.User) models.User {
-	ud.db.Save(&user)
-	return user
+func (ud UserDao) SaveUser(user models.User) (models.User, *custom_error.AppError) {
+	error := ud.db.Save(&user).Error
+	if error != nil {
+		return user, &custom_error.AppError{
+			Error:         fmt.Errorf("cannot save user"),
+			Message:       "User is not valid",
+			HttpErrorCode: 400,
+		}
+	}
+	return user, nil
 }
