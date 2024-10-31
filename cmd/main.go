@@ -4,6 +4,8 @@ import (
 	"auth-service/internal/application_context"
 	"auth-service/internal/config"
 	"auth-service/internal/http"
+	"os"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +14,11 @@ import (
 // @description     Microservice that is developed for authorization and authentication purposes
 // @host      localhost:9993
 func main() {
-	conf, err := config.LoadConfig(".")
+	configPath := os.Getenv("CONFIG_PATH")
+	if configPath == "" {
+		configPath = "."
+	}
+	conf, err := config.LoadConfig(configPath)
 	if err != nil {
 		panic("Cannot load config")
 	}

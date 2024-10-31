@@ -7,12 +7,14 @@ import (
 	"auth-service/internal/custom_error"
 	"auth-service/internal/models"
 	"fmt"
+	"net/http"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/markbates/goth/gothic"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
-	"net/http"
 )
 
 // @Summary      generates token
@@ -193,6 +195,9 @@ func InitRoutes(r *gin.Engine) {
 	})
 
 	r.GET("/metrics", prometheusHandler())
+
+	r.Use(cors.Default())
+
 	logger.Info("Routes initiated")
 }
 
