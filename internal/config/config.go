@@ -1,14 +1,16 @@
 package config
 
 import (
-	"github.com/spf13/viper"
+	"log"
 	"os"
+
+	"github.com/spf13/viper"
 )
 
 type Config struct {
 	DBHost                string `mapstructure:"POSTGRES_HOST"`
-	DBUserName            string `mapstructure:"POSTGRES_USER"`
-	DBUserPassword        string `mapstructure:"POSTGRES_PASSWORD"`
+	DBUserName            string `mapstructure:"POSTGRES_USER_NAME"`
+	DBUserPassword        string `mapstructure:"POSTGRES_PASS"`
 	DBName                string `mapstructure:"POSTGRES_DB"`
 	DBPort                string `mapstructure:"POSTGRES_PORT"`
 	ServerPort            string `mapstructure:"PORT"`
@@ -30,9 +32,11 @@ func LoadConfig(path string) (config Config, err error) {
 
 	err = viper.ReadInConfig()
 	if err != nil {
+		log.Print(err)
 		return
 	}
 
 	err = viper.Unmarshal(&config)
+
 	return
 }

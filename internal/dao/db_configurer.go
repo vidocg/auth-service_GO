@@ -4,13 +4,14 @@ import (
 	"auth-service/internal/config"
 	"database/sql"
 	"fmt"
+	"os"
+
 	"github.com/golang-migrate/migrate/v4"
 	migratePostgres "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"os"
 )
 
 func Configure(config *config.Config) *gorm.DB {
